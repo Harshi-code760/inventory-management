@@ -9,28 +9,42 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('access-token');
-        if(token) {
+        const token = localStorage.getItem('access_token');
+        if (token) {
             setUser(jwtDecode(token));
         }
         setLoading(false);
     }, []);
 
     const login = async (email, password) => {
-        const response = await api.post('auth/login/', {email, password});
-        localStorage.setItem('access_token', response.data.access);
-        localStorage.setItem('refresh_token', response.data.refresh);
-        setUser(jwtDecode(response.data.access));
+        try {
+            const response = await api.post('auth/login/', {
+                email: email,
+                username: email,
+                password: password
+            });
+
+            localStorage.setItem('access_token', response.data.access);
+            localStorage.setItem('refresh_token', response.data.refresh);
+
+            const decoded = jwtDecode(response.data.access);
+            setUser(decoded);
+
+            return true; 
+        } catch (err) {
+            console.error("Login failed", err.response?.data);
+            throw err;
+        }
     };
 
     const logout = () => {
-        localStorage.removeItem('access_time');
+        localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading}}>
+        <AuthContext.Provider value={{ user, login, logout, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );
