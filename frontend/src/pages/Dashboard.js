@@ -1,32 +1,53 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filterLow, setFilterLow] = useState(false);
+    const { logout } = useContext(AuthContext);
+
+    const loadItems = async () => {
+        try {
+            const url = filterLow ? 'items/?low=true' : 'items/';
+            const response = await api.get(url);
+            setItems(response.data.results || response.data);
+            setLoading(false);
+        } catch (err) {
+            console.error('Failed to fetch inventory', err);
+        }
+    };
+
+    const deleteItem = async (id) => {
+        if (window.confirm('Are you sure you want to delete this?')) {
+            try {
+                await api.delete(`items/${id}/`);
+                loadItems(); 
+            } catch (err) {
+                alert("Can't delete item.");
+            }
+        }
+    };
 
     useEffect(() => {
-        const fetchItems = async () => {
-            try {
-                const url = filterLow ? 'items/?low=true' : 'items/';
-                const response = await api.get(url);
-                setItems(response.data.results);
-                setLoading(false);
-            } catch (err) {
-                console.error('Failed to fetch inventory', err);
-            }
-        };
-        fetchItems();
-    }, [filterLow]);
+        loadItems();
+    }, [filterLow]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if (loading) return <p>Loading Inventory...</p>;
 
     return (
         <div className="dashboard">
             <h1>Inventory Management</h1>
+
+            <button
+                onClick={logout}
+                style={{ backgroundColor: '#ff4444', color: 'white', height: '40px' }}
+            >
+                Logout
+            </button>
 
             <div className="controls">
                 <button onClick={() => setFilterLow(!filterLow)}>
@@ -61,8 +82,8 @@ const Dashboard = () => {
                                 }
                             </td>
                             <td>
-                                <button>Edit</button>
-                                <button style={{ color: 'red' }}>Delete</button>
+                                <button onClick={() => navigate(`/edit/${item.id}`)}>Edit</button>
+                                <button onClick={() => deleteItem(item.id)} style={{ color: 'red' }}>Delete</button>
                             </td>
                         </tr>
                     ))}

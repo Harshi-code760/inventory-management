@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import AddItem from './pages/AddItem';
+import EditItem from './pages/EditItem';
 
 function App() {
   return (
@@ -15,6 +16,12 @@ function App() {
           <Route path="/add-item" element={
             <ProtectedRoute>
               <AddItem />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/edit/:id" element={
+            <ProtectedRoute>
+              <EditItem />
             </ProtectedRoute>
           } />
 

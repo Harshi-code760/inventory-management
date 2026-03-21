@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://glorious-invention-v6ggqg5xq69gfwxxp-8000.app.github.dev/api/',
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000/api/',
 });
 
 api.interceptors.request.use((config) => {
