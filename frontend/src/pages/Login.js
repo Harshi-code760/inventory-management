@@ -29,6 +29,9 @@ const Login = () => {
             <p style={{marginTop: '10px'}}>
                 <Link to="/forgot-password">Forgot your password?</Link>
             </p>
+            <p>
+                Don't have an account? <Link to="/register">Register</Link>
+            </p>
         </div>
     );
 };

@@ -25,7 +25,7 @@ const Dashboard = () => {
         if (window.confirm('Are you sure you want to delete this?')) {
             try {
                 await api.delete(`items/${id}/`);
-                loadItems(); 
+                loadItems();
             } catch (err) {
                 alert("Can't delete item.");
             }
@@ -42,12 +42,16 @@ const Dashboard = () => {
         <div className="dashboard">
             <h1>Inventory Management</h1>
 
-            <button
-                onClick={logout}
-                style={{ backgroundColor: '#ff4444', color: 'white', height: '40px' }}
-            >
-                Logout
-            </button>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+                <button onClick={() => navigate('/profile')}
+                    style={{ backgroundColor: '#555', color: 'white', height: '40px' }}>
+                    My Profile
+                </button>
+                <button onClick={logout}
+                    style={{ backgroundColor: '#ff4444', color: 'white', height: '40px' }}>
+                    Logout
+                </button>
+            </div>
 
             <div className="controls">
                 <button onClick={() => setFilterLow(!filterLow)}>

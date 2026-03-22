@@ -17,7 +17,7 @@ const AddItem = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await api.get('inventory/categories/');
+                const response = await api.get('categories/');
                 setCategories(response.data.results || response.data);
             } catch (err) {
                 console.error('Cannot load categories', err);
@@ -32,7 +32,7 @@ const AddItem = () => {
         if (!newCategoryName) return;
 
         try {
-            const response = await api.post('inventory/categories/', { name: newCategoryName });
+            const response = await api.post('categories/', { name: newCategoryName });
             setCategories([...categories, response.data]);
             setFormData(prev => ({ ...prev, category: response.data.id }));
             setNewCategoryName('');
