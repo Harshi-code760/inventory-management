@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import AddItem from './pages/AddItem';
 import EditItem from './pages/EditItem';
+import ForgetPassword from './pages/ForgetPassword';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
       <Router>
         <Routes>
           <Route path='/login' element={<Login />} />
+          <Route path='/forgot-password' element={<ForgetPassword />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
 
           <Route path="/add-item" element={
             <ProtectedRoute>
