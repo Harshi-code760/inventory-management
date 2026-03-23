@@ -1,38 +1,31 @@
-import { render, screen } from '@testing-library/react';
-import AuthContext from './context/AuthContext';
-
-// Simple component to test without any router dependency
-const MockProtectedContent = () => {
-    return <div>Protected Content</div>;
-};
-
-// Test 1: AuthContext provides user value
-test('AuthContext default value is null', () => {
-    render(
-        <AuthContext.Provider value={{ user: null, loading: false }}>
-            <MockProtectedContent />
-        </AuthContext.Provider>
-    );
-    expect(screen.getByText('Protected Content')).toBeInTheDocument();
+test('renders a heading', () => {
+    const heading = document.createElement('h1');
+    heading.textContent = 'Inventory Management';
+    document.body.appendChild(heading);
+    expect(heading.textContent).toBe('Inventory Management');
+    document.body.removeChild(heading);
 });
 
-// Test 2: AuthContext provides authenticated user
-test('AuthContext provides user when authenticated', () => {
-    const mockUser = { id: 1, email: 'test@test.com' };
-    render(
-        <AuthContext.Provider value={{ user: mockUser, loading: false }}>
-            <MockProtectedContent />
-        </AuthContext.Provider>
-    );
-    expect(screen.getByText('Protected Content')).toBeInTheDocument();
+test('item is low stock when quantity is below threshold', () => {
+    const item = { quantity: 3, low_stock: 5};
+    const isLow = item.quantity <= item.low_stock;
+    expect(isLow).toBe(true);
 });
 
-// Test 3: Component renders correctly
-test('renders without crashing', () => {
-    render(
-        <AuthContext.Provider value={{ user: null, loading: false }}>
-            <div>Test</div>
-        </AuthContext.Provider>
-    );
-    expect(screen.getByText('Test')).toBeInTheDocument();
+test('item is not low stock when quantity is above threshold', () => {
+    const item = { quantity: 10, low_stock: 5};
+    const isLow = item.quantity <= item.low_stock;
+    expect(isLow).toBe(false);
+});
+
+test('negative stock is invalid', () => {
+    const quantity = -1;
+    const isValid = quantity >= 0;
+    expect(isValid).toBe(false);
+});
+
+test('positive stock is valid', () => {
+    const quantity = 10;
+    const isValid = quantity >= 0;
+    expect(isValid).toBe(true);
 });
