@@ -77,7 +77,7 @@ const Dashboard = () => {
                     {items.map(item => (
                         <tr key={item.id}>
                             <td>{item.name}</td>
-                            <td>{item.category || 'Uncategorized'}</td>
+                            <td>{item.category_name || 'Uncategorised'}</td>
                             <td>{item.quantity}</td>
                             <td>
                                 {item.is_low ?

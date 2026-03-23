@@ -10,6 +10,7 @@ const EditItem = () => {
     });
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -84,9 +85,11 @@ const EditItem = () => {
                         onChange={e => setFormData({ ...formData, low_stock: parseInt(e.target.value) })}
                     />
                 </div>
-                <button type="submit">Update Item</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Updating...' : 'Update Item'}
+                </button>
                 <button type="button" onClick={() => navigate('/dashboard')}
-                    style={{ marginLeft: '10px' }}>
+                    style={{ marginLeft: '10px' }} disabled={loading}>
                     Cancel
                 </button>
             </form>

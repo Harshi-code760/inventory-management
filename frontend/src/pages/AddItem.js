@@ -12,6 +12,8 @@ const AddItem = () => {
     });
     const [error, setError] = useState('');
     const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,8 +27,6 @@ const AddItem = () => {
         };
         fetchCategories();
     }, []);
-
-    const [newCategoryName, setNewCategoryName] = useState('');
 
     const handleCreateCategory = async () => {
         if (!newCategoryName) return;
@@ -107,8 +107,8 @@ const AddItem = () => {
                         onChange={e => setFormData({ ...formData, quantity: e.target.value })}
                     />
                 </div>
-                <button type="submit">Create Item</button>
-                <button type="button" onClick={() => navigate('/dashboard')}>Cancel</button>
+                <button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create Item'}</button>
+                <button type="button" onClick={() => navigate('/dashboard')} disabled={loading}>Cancel</button>
             </form>
         </div>
     );
