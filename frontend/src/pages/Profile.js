@@ -26,6 +26,7 @@ const Profile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
+        setLoading(true);
         setError('');
 
         try {
@@ -33,6 +34,7 @@ const Profile = () => {
             setMessage('Profile updated successfully');
         } catch (err) {
             setError('Update failed');
+            setLoading(false);
         }
     };
 

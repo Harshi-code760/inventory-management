@@ -50,12 +50,15 @@ const AddItem = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
         try {
             await api.post('items/', formData);
             navigate('/dashboard');
         } catch (err) {
             const serverError = err.response?.data?.detail || "Error adding item";
             setError(serverError);
+            setLoading(false);
         }
     };
 

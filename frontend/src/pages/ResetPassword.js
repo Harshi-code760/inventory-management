@@ -19,6 +19,7 @@ const ResetPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         setError('');
 
         if(password !== confirm) {
@@ -37,6 +38,7 @@ const ResetPassword = () => {
             setTimeout(() => navigate('/login'), 2000);
         } catch (err) {
             setError(err.response?.data?.detail || 'Reset failed'); 
+            setLoading(false);
         }
     };
 

@@ -20,6 +20,7 @@ const Register = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
         if(formData.password.length < 8) {
             setError('Password must be 8 characters left');
             return;
@@ -34,6 +35,7 @@ const Register = () => {
             else if (data?.username) setError('Username: ' + data.username[0]);
             else if (data?.password) setError('Password: ' + data.password[0]);
             else setError('Registeration failed.');
+            setLoading(false);
         }
     };
 

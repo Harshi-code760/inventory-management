@@ -36,6 +36,7 @@ const EditItem = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         setError('');
         if (formData.quantity < 0) {
             setError('Stock cannot be negative');
@@ -46,6 +47,7 @@ const EditItem = () => {
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.detail || 'Update failed');
+            setLoading(false);
         }
     };
 
