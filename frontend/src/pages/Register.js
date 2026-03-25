@@ -1,6 +1,11 @@
 import {useState} from "react";
 import api from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
+import {
+    Box, Card, CardContent, TextField, Button,
+    Typography, Alert, CircularProgress
+} from '@mui/material';
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -9,6 +14,7 @@ const Register = () => {
         password: ''
     });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async(e) => {
@@ -31,40 +37,76 @@ const Register = () => {
         }
     };
 
-    return (
-        <div className="login-container">
-            <h2>Create Account</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={formData.username}
-                    onChange={e => setFormData({ ...formData, username: e.target.value })}
-                    required
-                />
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={e => setFormData({ ...formData, email: e.target.value })}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password (min 8 characters)"
-                    value={formData.password}
-                    onChange={e => setFormData({ ...formData, password: e.target.value })}
-                    required
-                />
-                <button type="submit">Register</button>
-            </form>
-            <p style={{ marginTop: '10px' }}>
-                Already have an account? <Link to="/login">Login</Link>
-            </p>
-        </div>
-    );
+return (
+        <Box sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)',
+        }}>
+            <Card sx={{ width: '100%', maxWidth: 420, mx: 2, borderRadius: 3, boxShadow: 6 }}>
+                <CardContent sx={{ p: 4 }}>
+                    <Box sx={{ textAlign: 'center', mb: 3 }}>
+                        <InventoryIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+                        <Typography variant="h5" color="primary">
+                            Create Account
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                            Get started with Inventory Manager
+                        </Typography>
+                    </Box>
 
+                    {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+                    <Box component="form" onSubmit={handleSubmit}>
+                        <TextField
+                            label="Username"
+                            value={formData.username}
+                            onChange={e => setFormData({ ...formData, username: e.target.value })}
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            label="Email Address"
+                            type="email"
+                            value={formData.email}
+                            onChange={e => setFormData({ ...formData, email: e.target.value })}
+                            required
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            label="Password"
+                            type="password"
+                            value={formData.password}
+                            onChange={e => setFormData({ ...formData, password: e.target.value })}
+                            required
+                            helperText="Minimum 8 characters"
+                            sx={{ mb: 3 }}
+                        />
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            fullWidth
+                            size="large"
+                            disabled={loading}
+                        >
+                            {loading ? <CircularProgress size={24} color="inherit" /> : 'Create Account'}
+                        </Button>
+                    </Box>
+
+                    <Box sx={{ textAlign: 'center', mt: 2 }}>
+                        <Typography variant="body2" color="text.secondary">
+                            Already have an account?{' '}
+                            <Link to="/login" style={{ color: '#1976d2', textDecoration: 'none', fontWeight: 600 }}>
+                                Sign In
+                            </Link>
+                        </Typography>
+                    </Box>
+                </CardContent>
+            </Card>
+        </Box>
+    );
 };
 
 export default Register;

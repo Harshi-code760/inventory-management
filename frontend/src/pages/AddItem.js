@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import {
+    Box, Button, Card, CardContent, CircularProgress,
+    Container, MenuItem, Select, TextField, Typography,
+    Alert, FormControl, InputLabel, Divider
+} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const AddItem = () => {
     const [formData, setFormData] = useState({
@@ -54,64 +60,77 @@ const AddItem = () => {
     };
 
     return (
-        <div className="add-item-container">
-            <h2>Add New Inventory Item</h2>
-            {error && <p style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>}
+        <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default', py: 4 }}>
+            <Container maxWidth="sm">
+                <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/dashboard')} sx={{ mb: 2 }}>
+                    Back to Dashboard
+                </Button>
+                <Card elevation={2} sx={{ borderRadius: 2 }}>
+                    <CardContent sx={{ p: 4 }}>
+                        <Typography variant="h5" sx={{ mb: 3 }}>Add New Item</Typography>
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Item Name:</label>
-                    <input type="text" required
-                        value={formData.name}
-                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    />
-                </div>
-                <div>
-                    <label>Category:</label>
-                    <select
-                        value={formData.category}
-                        onChange={e => setFormData({ ...formData, category: e.target.value })}
-                        required
-                        style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-                    >
-                        <option value="">-- Select a Category --</option>
-                        {categories.map(cat => (
-                            <option key={cat.id} value={cat.id}>
-                                {cat.name}
-                            </option>
-                        ))}
-                    </select>
-                    <div style={{ marginTop: '10px', padding: '10px', border: '1px dashed #ccc' }}>
-                        <p style={{ fontSize: '0.8em', margin: '0 0 5px 0' }}>Don't see a category?</p>
-                        <input
-                            type="text"
-                            placeholder="New category name..."
-                            value={newCategoryName}
-                            onChange={(e) => setNewCategoryName(e.target.value)}
-                            style={{ width: '60%', marginRight: '5px' }}
-                        />
-                        <button type="button" onClick={handleCreateCategory}>Add Category</button>
-                    </div>
-                </div>
-                <div>
-                    <label>Description:</label>
-                    <textarea
-                        value={formData.description}
-                        onChange={e => setFormData({ ...formData, description: e.target.value })}
-                    />
-                </div>
-                <div>
-                    <label>Initial Quantity:</label>
-                    <input type="number"
-                        value={formData.quantity}
-                        onChange={e => setFormData({ ...formData, quantity: e.target.value })}
-                    />
-                </div>
-                <button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create Item'}</button>
-                <button type="button" onClick={() => navigate('/dashboard')} disabled={loading}>Cancel</button>
-            </form>
-        </div>
+                        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+                        <Box component="form" onSubmit={handleSubmit}>
+                            <TextField label="Item Name" required value={formData.name}
+                                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                sx={{ mb: 2 }} />
+
+                            <FormControl fullWidth sx={{ mb: 1 }}>
+                                <InputLabel>Category</InputLabel>
+                                <Select
+                                    value={formData.category}
+                                    label="Category"
+                                    onChange={e => setFormData({ ...formData, category: e.target.value })}
+                                    required
+                                >
+                                    <MenuItem value="">-- Select a Category --</MenuItem>
+                                    {categories.map(cat => (
+                                        <MenuItem key={cat.id} value={cat.id}>{cat.name}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                            <Box sx={{ display: 'flex', gap: 1, mb: 2, alignItems: 'center' }}>
+                                <TextField
+                                    label="New category name"
+                                    value={newCategoryName}
+                                    onChange={e => setNewCategoryName(e.target.value)}
+                                    size="small"
+                                    sx={{ flex: 1 }}
+                                />
+                                <Button variant="outlined" onClick={handleCreateCategory} size="small">
+                                    Add
+                                </Button>
+                            </Box>
+
+                            <Divider sx={{ my: 2 }} />
+
+                            <TextField label="Description" multiline rows={3}
+                                value={formData.description}
+                                onChange={e => setFormData({ ...formData, description: e.target.value })}
+                                sx={{ mb: 2 }} />
+
+                            <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                                <TextField label="Initial Quantity" type="number"
+                                    value={formData.quantity}
+                                    onChange={e => setFormData({ ...formData, quantity: e.target.value })}
+                                    sx={{ flex: 1 }} />
+                                <TextField label="Low Stock Threshold" type="number"
+                                    value={formData.low_stock}
+                                    onChange={e => setFormData({ ...formData, low_stock: e.target.value })}
+                                    sx={{ flex: 1 }} />
+                            </Box>
+
+                            <Button type="submit" variant="contained" fullWidth
+                                size="large" disabled={loading}>
+                                {loading ? <CircularProgress size={24} color="inherit" /> : 'Create Item'}
+                            </Button>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Container>
+        </Box>
     );
 };
-
 export default AddItem;

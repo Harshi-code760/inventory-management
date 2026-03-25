@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from '../api/axios';
+import {
+    Box, Button, Card, CardContent, CircularProgress,
+    Container, MenuItem, Select, TextField, Typography,
+    Alert, FormControl, InputLabel
+} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const EditItem = () => {
     const { id } = useParams();
@@ -43,57 +49,62 @@ const EditItem = () => {
         }
     };
 
-    return (
-        <div className="container">
-            <h2>Edit Item</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Item Name: </label>
-                    <input type="text" value={formData.name}
-                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                        required />
-                </div>
-                <div>
-                    <label>Category: </label>
-                    <select
-                        value={formData.category || ''}
-                        onChange={e => setFormData({ ...formData, category: e.target.value })}
-                        style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-                    >
-                        <option value="">-- Select a Category --</option>
-                        {categories.map(cat => (
-                            <option key={cat.id} value={cat.id}>{cat.name}</option>
-                        ))}
-                    </select>
-                </div>
-                <div>
-                    <label>Description: </label>
-                    <textarea value={formData.description || ''}
-                        onChange={e => setFormData({ ...formData, description: e.target.value })}
-                    />
-                </div>
-                <div>
-                    <label>Quantity: </label>
-                    <input type="number" value={formData.quantity}
-                        onChange={e => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
-                    />
-                </div>
-                <div>
-                    <label>Low Stock Threshold: </label>
-                    <input type="number" value={formData.low_stock}
-                        onChange={e => setFormData({ ...formData, low_stock: parseInt(e.target.value) })}
-                    />
-                </div>
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Updating...' : 'Update Item'}
-                </button>
-                <button type="button" onClick={() => navigate('/dashboard')}
-                    style={{ marginLeft: '10px' }} disabled={loading}>
-                    Cancel
-                </button>
-            </form>
-        </div>
+return (
+        <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default', py: 4 }}>
+            <Container maxWidth="sm">
+                <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/dashboard')} sx={{ mb: 2 }}>
+                    Back to Dashboard
+                </Button>
+                <Card elevation={2} sx={{ borderRadius: 2 }}>
+                    <CardContent sx={{ p: 4 }}>
+                        <Typography variant="h5" sx={{ mb: 3 }}>Edit Item</Typography>
+
+                        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
+                        <Box component="form" onSubmit={handleSubmit}>
+                            <TextField label="Item Name" required value={formData.name}
+                                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                sx={{ mb: 2 }} />
+
+                            <FormControl fullWidth sx={{ mb: 2 }}>
+                                <InputLabel>Category</InputLabel>
+                                <Select
+                                    value={formData.category || ''}
+                                    label="Category"
+                                    onChange={e => setFormData({ ...formData, category: e.target.value })}
+                                >
+                                    <MenuItem value="">-- Select a Category --</MenuItem>
+                                    {categories.map(cat => (
+                                        <MenuItem key={cat.id} value={cat.id}>{cat.name}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                            <TextField label="Description" multiline rows={3}
+                                value={formData.description || ''}
+                                onChange={e => setFormData({ ...formData, description: e.target.value })}
+                                sx={{ mb: 2 }} />
+
+                            <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                                <TextField label="Quantity" type="number"
+                                    value={formData.quantity}
+                                    onChange={e => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
+                                    sx={{ flex: 1 }} />
+                                <TextField label="Low Stock Threshold" type="number"
+                                    value={formData.low_stock}
+                                    onChange={e => setFormData({ ...formData, low_stock: parseInt(e.target.value) })}
+                                    sx={{ flex: 1 }} />
+                            </Box>
+
+                            <Button type="submit" variant="contained" fullWidth
+                                size="large" disabled={loading}>
+                                {loading ? <CircularProgress size={24} color="inherit" /> : 'Update Item'}
+                            </Button>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Container>
+        </Box>
     );
 };
 
